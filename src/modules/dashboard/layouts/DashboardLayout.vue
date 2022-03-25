@@ -1,23 +1,20 @@
 <template>
-  <div class="flex justify-between h-screen mx-auto antialiased">
-    <div class="fixed h-screen dark:bg-dark-50 bg-dark-default">
-      <h1
-        class="py-4 font-black transition-colors duration-300 hover:dark:text-golden"
-      >
-        {{ $t("dashboard.title") }}
-      </h1>
-      <div class="px-4 space-y-2">
-        <!-- Home -->
-        <div
-          class="relative flex items-center p-2 space-x-2 transition-colors duration-300 rounded-md cursor-pointer hover:text-golden hover:bg-gray-800"
-        >
-        </div>
+  <div class="relative z-0 flex justify-between h-screen mx-auto antialiased">
+    <NavBar />
+    <div class="relative w-11/12 p-10 -z-50">
+      <div class="flex items-center justify-center h-full">
+        <h1>Todo listo</h1>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+
+import NavBar from '../components/NavBar';
+
+
+
 </script>
 
 <style>

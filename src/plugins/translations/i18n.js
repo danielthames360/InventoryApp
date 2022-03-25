@@ -16,4 +16,5 @@ export default createI18n({
   locale: "es",
   fallbackLocale: "en",
   messages,
+  allowComposition: true, // you need to specify that!
 });

@@ -1,12 +1,16 @@
 const translation = {
   es: {
     nav: {
-      dashboard: "Tablero",
+      home: "Tablero",
+      sales: "Ventas",
+      purchases: 'Compras'
     },
   },
   en: {
     nav: {
-      dashboard: "Dashboard",
+      home: "Dashboard",
+      sales: "Sales",
+      purchases: 'Purchases'
     },
   },
 };

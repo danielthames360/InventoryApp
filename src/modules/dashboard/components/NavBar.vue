@@ -15,7 +15,7 @@
     </button>
 
     <div
-        class="absolute h-full transition-all duration-500 ease-in-out md:relative dark:bg-dark-50 bg-dark-default"
+        class="absolute h-full transition-all duration-500 ease-in-out md:relative dark:bg-dark-50 bg-dark"
         :class="{ 'w-52': sidebar.full, 'w-64 sm:w-20': !sidebar.full, 'top-0 left-0': sidebar.navOpen, 'top-0 -left-64 sm:left-0 ': !sidebar.navOpen }"
     >
         <!-- Sidebar toggle-->
@@ -66,7 +66,7 @@
                 @mouseover="showDarkModeTooltip = true"
                 @mouseleave="showDarkModeTooltip = false"
                 @click="toggleDarkMode"
-                class="relative flex items-center p-2 space-x-2 transition-colors duration-300 rounded-md cursor-pointer hover:text-golden hover:bg-gray-800 animate-pulse"
+                class="relative flex items-center p-2 space-x-2 transition-colors duration-300 rounded-md cursor-pointer hover:text-golden animate-pulse"
                 :class="{ 'justify-start': sidebar.full, 'sm:justify-center': !sidebar.full }"
             >
                 <NightIcon class="w-6 h-6 fill-light" v-if="!getDarkModeStatus" />
@@ -83,7 +83,7 @@
                 @mouseover="showLanguageTooltip = true"
                 @mouseleave="showLanguageTooltip = false"
                 @click="toggleLanguage"
-                class="relative flex items-center p-2 space-x-2 transition-colors duration-300 rounded-md cursor-pointer hover:text-golden hover:bg-gray-800"
+                class="relative flex items-center p-2 space-x-2 transition-colors duration-300 rounded-md cursor-pointer hover:text-golden"
                 :class="{ 'justify-start': sidebar.full, 'sm:justify-center': !sidebar.full }"
             >
                 <SpainFlagIcon class="w-6 h-6 fill-light" v-if="(language != 'es')" />
@@ -157,7 +157,7 @@ watchEffect(() => {
     sidebar.value.full = false;
 })
 
-const tooltipClass = 'block sm:absolute top-2 sm:px-2 sm:bg-dark-default border-gray-800 left-10 sm:text-sm sm:bg-gray-900 sm:px2 sm:py-1 sm:rounded z-1';
+const tooltipClass = 'block sm:absolute top-2 sm:px-2 bg-dark  left-10 sm:text-sm sm:px2 sm:py-1 sm:rounded z-1';
 const showDarkModeTooltip = ref(false);
 const showLanguageTooltip = ref(false);
 

@@ -1,7 +1,7 @@
 <template >
   <div :class="getDarkMode ? 'dark' : ''">
     <div
-      class="transition-colors duration-500 ease-in-out bg-light dark:bg-dark-default text-light"
+      class="transition-colors duration-500 ease-in-out bg-light dark:bg-dark text-light"
     >
       <Dashboard />
     </div>

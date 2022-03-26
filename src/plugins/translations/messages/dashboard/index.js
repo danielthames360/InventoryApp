@@ -4,13 +4,15 @@ const translation = {
   es: {
     dashboard: {
       title: "INVENTARIO",
-      ...nav['es'],
+      text: "Todo listo para continuar...",
+      ...nav["es"],
     },
   },
   en: {
     dashboard: {
       title: "INVENTORY",
-      ...nav['en'],
+      text: "Everything ready to continue...",
+      ...nav["en"],
     },
   },
 };

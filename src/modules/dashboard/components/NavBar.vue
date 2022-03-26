@@ -4,8 +4,14 @@
         @click="sidebar.navOpen = !sidebar.navOpen"
         class="absolute sm:hidden top-5 right-5 focus:outline-none"
     >
-        <MenuToggleIcon class="w-6 h-6 fill-light" :class="sidebar.navOpen ? 'hidden' : ''" />
-        <CloseIcon class="w-6 h-6 fill-light" :class="sidebar.navOpen ? '' : 'hidden'" />
+        <MenuToggleIcon
+            class="w-6 h-6 dark:fill-light fill-dark-300"
+            :class="sidebar.navOpen ? 'hidden' : ''"
+        />
+        <CloseIcon
+            class="w-6 h-6 dark:fill-light fill-dark-300"
+            :class="sidebar.navOpen ? '' : 'hidden'"
+        />
     </button>
 
     <div
@@ -25,7 +31,7 @@
         <h1
             class="pt-5 pb-10 font-black transition-all duration-300 ease hover:dark:text-golden"
             :class="sidebar.full ? 'text-2xl px-4' : 'text-xl px-4 xm:px-2'"
-        >{{ sidebar.full ? $t("dashboard.title") : $t('dashboard.title').substring(0, 4) }}</h1>
+        >{{ sidebar.full || sidebar.navOpen ? $t("dashboard.title") : $t('dashboard.title').substring(0, 4) }}</h1>
         <div class="px-4 space-y-2">
             <!-- Nav Items -->
             <template v-for="navigation in navigationList" :key="navigation.name">
@@ -38,9 +44,42 @@
                     <component class="w-6 h-6 fill-light" :is="getIcon(navigation.icon)"></component>
                     <h1
                         :class="(!sidebar.full && navigation.showTooltip) ? tooltipClass : '' || (!sidebar.full && !navigation.showTooltip) ? 'sm:hidden' : ''"
-                    >{{ navigation.name }}</h1>
+                    >{{ $t(navigation.name) }}</h1>
                 </div>
             </template>
+        </div>
+        <div class="absolute px-4 bottom-6">
+            <div
+                @mouseover="showDarkModeTooltip = true"
+                @mouseleave="showDarkModeTooltip = false"
+                @click="toggleDarkMode"
+                class="relative flex items-center p-2 space-x-2 transition-colors duration-300 rounded-md cursor-pointer hover:text-golden hover:bg-gray-800 animate-pulse"
+                :class="{ 'justify-start': sidebar.full, 'sm:justify-center': !sidebar.full }"
+            >
+                <NightIcon class="w-6 h-6 fill-light" v-if="!getDarkModeStatus" />
+                <LightIcon class="w-6 h-6 fill-light" v-else />
+
+                <h1
+                    :class="(!sidebar.full && showDarkModeTooltip) ? tooltipClass : '' || (!sidebar.full && !showDarkModeTooltip) ? 'sm:hidden' : ''"
+                >{{ !getDarkModeStatus ? $t('dashboard.nav.darkMode') : $t('dashboard.nav.lightMode') }}</h1>
+            </div>
+        </div>
+
+        <div class="absolute px-4 bottom-20">
+            <div
+                @mouseover="showLanguageTooltip = true"
+                @mouseleave="showLanguageTooltip = false"
+                @click="toggleLanguage"
+                class="relative flex items-center p-2 space-x-2 transition-colors duration-300 rounded-md cursor-pointer hover:text-golden hover:bg-gray-800"
+                :class="{ 'justify-start': sidebar.full, 'sm:justify-center': !sidebar.full }"
+            >
+                <SpainFlagIcon class="w-6 h-6 fill-light" v-if="(language != 'es')" />
+                <EnglishFlagIcon class="w-6 h-6 fill-light" v-else />
+
+                <h1
+                    :class="(!sidebar.full && showLanguageTooltip) ? tooltipClass : '' || (!sidebar.full && !showLanguageTooltip) ? 'sm:hidden' : ''"
+                >{{ (language != 'es') ? $t('dashboard.nav.spanish') : $t('dashboard.nav.english') }}</h1>
+            </div>
         </div>
     </div>
 </template>
@@ -53,13 +92,23 @@ import SalesIcon from '@/assets/icons/SalesIcon';
 import PurchasesIcon from '@/assets/icons/PurchasesIcon';
 import MenuToggleIcon from '@/assets/icons/MenuToggleIcon';
 import CloseIcon from '@/assets/icons/CloseIcon';
+import LightIcon from '@/assets/icons/LightIcon';
+import NightIcon from '@/assets/icons/NightIcon';
+import EnglishFlagIcon from '@/assets/icons/EnglishFlagIcon';
+import SpainFlagIcon from '@/assets/icons/SpainFlagIcon';
 
 import { useI18n } from 'vue-i18n/index'
 
-import { ref } from 'vue';
+import { ref, computed, defineProps, watchEffect } from 'vue';
 
-const { t } = useI18n() // use as global scope
+import { useStore } from 'vuex';
 
+const props = defineProps(['toggleNavSide'])
+
+
+const { locale } = useI18n() // use as global scope
+
+const store = useStore()
 
 const sidebar = ref({
     full: false,
@@ -67,21 +116,29 @@ const sidebar = ref({
     navOpen: false
 })
 
+
+watchEffect(() => {
+    props.toggleNavSide;
+    sidebar.value.navOpen = false;
+    sidebar.value.full = false;
+})
+
+
 const tooltipClass = 'block sm:absolute -top-1 sm:px-2 sm:bg-dark-default border-gray-800 left-7 sm:text-sm sm:bg-gray-900 sm:px2 sm:py-1 sm:rounded z-1';
 
 const navigationList = ref([
     {
-        name: t('dashboard.nav.home'),
+        name: 'dashboard.nav.home',
         icon: 'HomeIcon',
         showTooltip: false,
     },
     {
-        name: t('dashboard.nav.sales'),
+        name: 'dashboard.nav.sales',
         icon: 'SalesIcon',
         showTooltip: false,
     },
     {
-        name: t('dashboard.nav.purchases'),
+        name: 'dashboard.nav.purchases',
         icon: 'PurchasesIcon',
         showTooltip: false,
     }
@@ -91,10 +148,31 @@ const icons = [
     { name: 'HomeIcon', component: HomeIcon }, { name: 'SalesIcon', component: SalesIcon }, { name: 'PurchasesIcon', component: PurchasesIcon }
 ]
 
+const showDarkModeTooltip = ref(false);
+const showLanguageTooltip = ref(false);
+
 const getIcon = (name) => {
     return icons.find((el) => el.name == name).component;
 }
 
+
+const toggleDarkMode = () => {
+    store.commit('toggleDarkMode');
+    sidebar.value.navOpen = false;
+    sidebar.value.full = false;
+}
+const getDarkModeStatus = computed(() =>
+    store.getters['getDarkModeStatus'])
+
+const toggleLanguage = () => {
+    store.commit('toggleLanguage');
+
+    locale.value = (locale.value == "es") ? "en" : "es";
+    sidebar.value.navOpen = false;
+    sidebar.value.full = false;
+}
+const language = computed(() =>
+    store.getters['getLanguage'])
 
 </script>
 

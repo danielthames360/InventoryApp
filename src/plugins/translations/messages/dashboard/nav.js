@@ -3,14 +3,22 @@ const translation = {
     nav: {
       home: "Tablero",
       sales: "Ventas",
-      purchases: 'Compras'
+      purchases: "Compras",
+      darkMode: "Modo oscuro",
+      lightMode: "Modo claro",
+      spanish: "Español",
+      english: "Inglés",
     },
   },
   en: {
     nav: {
       home: "Dashboard",
       sales: "Sales",
-      purchases: 'Purchases'
+      purchases: "Purchases",
+      darkMode: "Dark mode",
+      lightMode: "Light mode",
+      spanish: "Spanish",
+      english: "English",
     },
   },
 };

@@ -1,8 +1,19 @@
 import { createStore } from "vuex";
 
+const getDarkMode = () => {
+  if (
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 export default createStore({
   state: {
-    darkMode: false,
+    darkMode: getDarkMode(),
     language: "es",
   },
   getters: {

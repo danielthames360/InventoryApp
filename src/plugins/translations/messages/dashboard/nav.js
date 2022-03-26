@@ -1,7 +1,7 @@
 const translation = {
   es: {
     nav: {
-      home: "Tablero",
+      home: "Inicio",
       sales: "Ventas",
       purchases: "Compras",
       darkMode: "Modo oscuro",

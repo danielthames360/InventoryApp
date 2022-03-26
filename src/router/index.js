@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
-import dashboard from "@/modules/dashboard/router";
+import reports from "@/modules/reports/router";
+import sales from "@/modules/sales/router";
+import purchases from "@/modules/purchases/router";
 
 const routes = [
   {
@@ -9,15 +11,20 @@ const routes = [
   },
   {
     path: "/dashboard",
-    ...dashboard,
+    ...reports,
   },
-  // {
-  //   path: "/:pathMatch(.*)*",
-  //   component: () =>
-  //     import(
-  //       /* webpackChunkName: "NoPageFound" */ "@/modules/shared/pages/NoPageFound.vue"
-  //     ),
-  // },
+  {
+    path: "/sales",
+    ...sales,
+  },
+  {
+    path: "/purchases",
+    ...purchases,
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: "/dashboard",
+  },
 ];
 
 const router = createRouter({

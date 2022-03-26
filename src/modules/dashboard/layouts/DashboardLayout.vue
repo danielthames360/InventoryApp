@@ -1,0 +1,27 @@
+<template>
+  <div
+    class="relative z-0 flex justify-between h-screen max-h-[-webkit-fill-available] mx-auto antialiased"
+  >
+    <NavBar :toggleNavSide="toggleNav" />
+    <div class="relative w-full p-10 sm:w-12/12 -z-50 h-fit" @click="toggleNav = !toggleNav">
+      <div class="flex items-center justify-center">
+        <h1 class="text-center dark:text-light text-dark-300">
+          {{ $t('dashboard.text') }}
+          <router-view></router-view>
+        </h1>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+
+
+import { ref, defineAsyncComponent } from 'vue';
+
+const toggleNav = ref(false);
+const NavBar = defineAsyncComponent(() => import('../components/NavBar.vue'))
+
+
+</script>
+ 

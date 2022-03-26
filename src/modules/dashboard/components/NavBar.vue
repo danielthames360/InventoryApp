@@ -122,10 +122,9 @@ const router = useRouter()
 
 const props = defineProps(['toggleNavSide'])
 
-
 const sidebar = ref({
     full: false,
-    active: 'reports',
+    active: router.currentRoute.value.name,
     navOpen: false
 })
 const navigationList = ref([

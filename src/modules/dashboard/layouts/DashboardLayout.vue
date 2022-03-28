@@ -31,9 +31,7 @@ import { ref, defineAsyncComponent } from 'vue';
 const toggleNav = ref(false);
 const NavBar = defineAsyncComponent(() => import('../components/NavBar.vue'))
 
-
 </script>
- 
 
  <style>
 .fade-enter-active,

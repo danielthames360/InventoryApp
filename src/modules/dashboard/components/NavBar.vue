@@ -15,12 +15,12 @@
     </button>
 
     <div
-        class="absolute h-full transition-all duration-500 ease-in-out md:relative dark:bg-dark-50 bg-dark"
+        class="absolute h-full transition-all duration-500 ease-in-out md:relative dark:bg-dark-100 bg-dark"
         :class="{ 'w-52': sidebar.full, 'w-64 sm:w-20': !sidebar.full, 'top-0 left-0': sidebar.navOpen, 'top-0 -left-64 sm:left-0 ': !sidebar.navOpen }"
     >
         <!-- Sidebar toggle-->
         <button
-            class="absolute hidden rounded-full shadow-md -z-10 bg-dark-50 sm:block -right-[15px] top-10"
+            class="absolute hidden rounded-full shadow-md -z-10 bg-dark-100 sm:block -right-[15px] top-10"
         >
             <AngleRightIcon
                 @click="sidebar.full = !sidebar.full"
@@ -35,10 +35,14 @@
         >{{ sidebar.full || sidebar.navOpen ? $t("dashboard.title") : $t('dashboard.title').substring(0, 4) }}</h1>
         <div class="px-4 space-y-2">
             <!-- Nav Items -->
-            <template v-for="navigation in navigationList" :key="navigation.name">
+            <div
+                v-for="navigation in navigationList"
+                :key="navigation.name"
+                v-memo="[navigation.showTooltip, sidebar.active, sidebar.full, language]"
+            >
                 <div
                     @click="navigateTo(navigation.route)"
-                    @mouseover="navigation.showTooltip = true"
+                    @mouseenter="!sidebar.full && !sidebar.navOpen ? navigation.showTooltip = true : false;"
                     @mouseleave="navigation.showTooltip = false"
                     class="relative flex items-center p-2 space-x-2 transition-colors duration-300 rounded-md cursor-pointer hover:text-golden hover:animate-bounce"
                     :class="{
@@ -59,7 +63,7 @@
                         :class="(!sidebar.full && navigation.showTooltip) ? tooltipClass : '' || (!sidebar.full && !navigation.showTooltip) ? 'sm:hidden' : ''"
                     >{{ $t(navigation.name) }}</h1>
                 </div>
-            </template>
+            </div>
         </div>
         <div class="absolute px-4 bottom-6">
             <div
@@ -157,7 +161,7 @@ watchEffect(() => {
     sidebar.value.full = false;
 })
 
-const tooltipClass = 'block sm:absolute top-2 sm:px-2 bg-dark  left-10 sm:text-sm sm:px2 sm:py-1 sm:rounded z-1';
+const tooltipClass = 'block sm:absolute top-2 sm:px-2 left-10 sm:text-sm sm:px2 sm:py-1 sm:rounded z-1';
 const showDarkModeTooltip = ref(false);
 const showLanguageTooltip = ref(false);
 

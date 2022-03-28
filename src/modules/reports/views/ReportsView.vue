@@ -24,14 +24,19 @@
             <img class="mx-auto my-0" v-show="picture != ''" :src="picture" alt />
             <br />
 
-            <button @click="getAuthStatus" class="w-56 p-2 bg-green-500 rounded">Auth Google Status</button>
+            <button @click="getAuthStatus" class="w-56 p-2 bg-green-500 rounded">Auth Status</button>
             <br />
-            <button @click="logout" class="w-56 p-2 rounded bg-slate-700">logout google</button>
+            <button @click="logout" class="w-56 p-2 rounded bg-cyan-900">logout</button>
             <br />
             <button
                 @click="authWithGoogle"
                 class="w-56 p-2 bg-red-500 rounded hover:bg-red-400"
             >SignIn with Google</button>
+            <br />
+            <button
+                @click="authWithFacebook"
+                class="w-56 p-2 rounded bg-slate-700 hover:bg-blue-700"
+            >SignIn with Facebook</button>
         </div>
     </div>
 </template>
@@ -39,7 +44,10 @@
 <script setup>
 
 import { ref } from "vue";
-import { getAuth, signOut, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+    getAuth, signOut, GoogleAuthProvider, signInWithPopup,
+    FacebookAuthProvider
+} from "firebase/auth";
 
 
 const auth = getAuth();
@@ -83,7 +91,27 @@ const authWithGoogle = async () => {
             alert(error)
         });
 
-    alert('executed')
+    alert('executed google')
+
+}
+
+const authWithFacebook = async () => {
+    const provider = new FacebookAuthProvider();
+
+    signInWithPopup(auth, provider)
+        .then((result) => {
+            // The signed-in user info.
+            console.log(result);
+            if (result.user) {
+                picture.value = result.user.photoURL;
+            }
+            // ...
+        }).catch((error) => {
+            console.log(error);
+            alert(error)
+        });
+
+    alert('executed fb')
 
 }
 

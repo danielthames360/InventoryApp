@@ -15,7 +15,7 @@
     </button>
 
     <div
-        class="absolute h-full transition-all duration-500 ease-in-out md:relative dark:bg-dark-100 bg-dark"
+        class="absolute h-full min-h-[-webkit-fill-available] transition-all duration-500 ease-in-out md:relative dark:bg-dark-100 bg-dark"
         :class="{ 'w-52': sidebar.full, 'w-64 sm:w-20': !sidebar.full, 'top-0 left-0': sidebar.navOpen, 'top-0 -left-64 sm:left-0 ': !sidebar.navOpen }"
     >
         <!-- Sidebar toggle-->

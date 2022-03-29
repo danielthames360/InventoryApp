@@ -12,6 +12,6 @@ import { useStore } from "vuex";
 
 const store = useStore();
 
-const getDarkMode = computed(() => store.getters['getDarkModeStatus'])
+const getDarkMode = computed(() => store.getters['global/getDarkModeStatus'])
 
 </script>

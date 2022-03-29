@@ -155,13 +155,13 @@ const icons = [
     { name: 'HomeIcon', component: HomeIcon }, { name: 'SalesIcon', component: SalesIcon }, { name: 'PurchasesIcon', component: PurchasesIcon }
 ]
 
-watchEffect(() => {
-    props.toggleNavSide;
+
+const closeSideBar = () => {
     sidebar.value.navOpen = false;
     sidebar.value.full = false;
-})
+}
 
-const tooltipClass = 'block sm:absolute top-2 sm:px-2 left-10 sm:text-sm sm:px2 sm:py-1 sm:rounded z-1';
+const tooltipClass = 'block sm:absolute top-2 sm:px-2 left-10 sm:text-sm bg-dark-100 sm:px2 sm:py-1 sm:rounded z-1';
 const showDarkModeTooltip = ref(false);
 const showLanguageTooltip = ref(false);
 
@@ -169,19 +169,17 @@ const getIcon = (name) => {
     return icons.find((el) => el.name == name).component;
 }
 const toggleDarkMode = () => {
-    store.commit('toggleDarkMode');
-    sidebar.value.navOpen = false;
-    sidebar.value.full = false;
+    store.commit('global/toggleDarkMode');
+    closeSideBar()
 }
 const getDarkModeStatus = computed(() =>
-    store.getters['getDarkModeStatus'])
+    store.getters['global/getDarkModeStatus'])
 
 const toggleLanguage = () => {
-    store.commit('toggleLanguage');
+    store.commit('global/toggleLanguage');
 
     locale.value = (locale.value == "es") ? "en" : "es";
-    sidebar.value.navOpen = false;
-    sidebar.value.full = false;
+    closeSideBar()
 }
 const language = computed(() =>
     store.getters['getLanguage'])
@@ -196,5 +194,9 @@ const navigateTo = (routeName) => {
 
 }
 
+watchEffect(() => {
+    props.toggleNavSide;
+    closeSideBar()
+})
 </script>
  

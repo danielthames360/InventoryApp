@@ -1,6 +1,6 @@
 <template>
     <div
-        class="flex items-center justify-between h-auto min-h-screen m-auto overflow-scroll sm:justify-center"
+        class="flex items-center justify-between h-auto min-h-screen m-auto overflow-y-clip sm:overflow-hidden sm:justify-center"
     >
         <div class="relative w-full md:w-6/12 lg:w-5/12 xl:w-4/12">
             <div
@@ -39,7 +39,7 @@
             </div>
         </div>
 
-        <div hidden class="md:w-6/12 lg:w-7/12 xl:w-8/12 lg:block clip">
+        <div hidden class="h-screen md:w-6/12 lg:w-7/12 xl:w-8/12 lg:block clip">
             <video
                 playsinline
                 class="object-cover w-full h-full"

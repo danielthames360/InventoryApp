@@ -13,5 +13,13 @@ export default {
           /* webpackChunkName: "Login" */ "@/modules/auth/views/LoginView.vue"
         ),
     },
+    {
+      path: "/register",
+      name: "register",
+      component: () =>
+        import(
+          /* webpackChunkName: "Register" */ "@/modules/auth/views/RegisterView.vue"
+        ),
+    },
   ],
 };

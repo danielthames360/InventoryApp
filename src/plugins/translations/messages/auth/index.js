@@ -1,6 +1,9 @@
+import errorMessages from "./errorMessages.js";
+
 const translation = {
   es: {
     auth: {
+      ...errorMessages["es"],
       title: "App de inventario",
       name: "Nombre",
       namePlaceholder: "Ingresa tu nombre",
@@ -9,6 +12,7 @@ const translation = {
       password: "Contraseña",
       passwordPlaceholder: "Elige una contraseña segura",
       passwordPlaceholderLogin: "Ingresa tu contraseña",
+      alreadyAccount: `Ya tienes una cuenta?`,
       noAccount: `No tienes una cuenta?`,
       logIn: `Inicia sesión`,
       signUp: `Registrate`,
@@ -21,6 +25,7 @@ const translation = {
   },
   en: {
     auth: {
+      ...errorMessages["en"],
       title: "Inventory App",
       name: "Name",
       namePlaceholder: "Enter you name",
@@ -29,6 +34,7 @@ const translation = {
       password: "Password",
       passwordPlaceholder: "Pick a strong password",
       passwordPlaceholderLogin: "Enter your password",
+      alreadyAccount: `Already have an account?`,
       noAccount: `Don't have an account?`,
       logIn: `Log in`,
       signUp: `Sign up`,

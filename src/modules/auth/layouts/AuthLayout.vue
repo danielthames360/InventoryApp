@@ -1,14 +1,19 @@
 <template>
     <div
-        class="flex justify-between h-screen m-auto sm:justify-center "
+        class="flex items-center justify-between h-auto min-h-screen m-auto overflow-scroll sm:justify-center"
     >
         <div class="relative w-full md:w-6/12 lg:w-5/12 xl:w-4/12">
             <div
-                class="relative flex flex-col justify-center h-screen px-10 sm:px-16 md:px-4 lg:px-9 xl:px-12"
+                class="relative flex flex-col justify-center px-10 sm:px-16 md:px-4 lg:px-9 xl:px-12"
             >
-                <router-view></router-view>
-
-                <div class="relative flex justify-around mt-auto sm:mt-24 bottom-5">
+                <router-view :language="language" v-slot="{ Component }">
+                    <transition name="fade" mode="out-in">
+                        <keep-alive>
+                            <component :is="Component" />
+                        </keep-alive>
+                    </transition>
+                </router-view>
+                <div class="relative flex justify-around mt-10 sm:mt-24 bottom-5">
                     <div
                         @click="toggleLanguage"
                         class="relative flex items-center p-2 space-x-2 transition-colors duration-300 rounded-md cursor-pointer dark:hover:text-golden text-dark-300 dark:text-light"
@@ -55,7 +60,7 @@ import NightIcon from '@/assets/icons/NightIcon';
 import EnglishFlagIcon from '@/assets/icons/EnglishFlagIcon';
 import SpainFlagIcon from '@/assets/icons/SpainFlagIcon';
 
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n/index'
 
@@ -68,12 +73,14 @@ const toggleDarkMode = () => {
 const getDarkModeStatus = computed(() =>
     store.getters['global/getDarkModeStatus'])
 
+const language = ref(() =>
+    store.getters['global/getLanguage'])
+
 const toggleLanguage = () => {
     store.commit('global/toggleLanguage');
     locale.value = (locale.value == "es") ? "en" : "es";
 }
-const language = computed(() =>
-    store.getters['getLanguage'])
+
 </script>
  
   <style scoped>

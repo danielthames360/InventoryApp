@@ -59,7 +59,7 @@ export const signInUser = async ({ commit }, user) => {
 
     return { ok: true, message: "success" };
   } catch ({ message, code }) {
-    return { ok: false, message };
+    return { ok: false, message, code };
   }
 };
 

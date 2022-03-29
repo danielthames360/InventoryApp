@@ -15,7 +15,7 @@ const translation = {
   en: {
     validations: {
       required: "Cannot be empty",
-      minLength: "Should be at least 4 ",
+      minLength: "Should be at least",
       maxLength: "Maximum characters allowed is",
       minValue: "Must be at least",
       maxValue: "Cannot be greater than",

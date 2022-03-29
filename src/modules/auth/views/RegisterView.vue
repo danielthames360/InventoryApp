@@ -2,10 +2,10 @@
     <div>
         <h1
             class="pl-2 mt-4 text-4xl font-bold text-center sm:mt-0 sm:text-left text-dark-300 dark:text-light"
-        >{{ $t('auth.logIn') }}</h1>
+        >{{ $t('auth.signUp') }}</h1>
         <h4
             class="pl-2 mt-16 text-sm font-semibold dark:text-light text-dark-300"
-        >{{ $t('auth.logIn') }} {{ $t('auth.authMessage') }}</h4>
+        >{{ $t('auth.signUp') }} {{ $t('auth.authMessage') }}</h4>
 
         <div class="grid grid-cols-2 gap-6 mt-5">
             <button
@@ -30,6 +30,22 @@
             </button>
         </div>
         <form @submit.prevent="onSubmit" class="py-6 mt-3 space-y-6 sm:mt-5">
+            <div>
+                <label
+                    class="pl-2 text-sm font-semibold dark:text-light text-dark-300"
+                >{{ $t('auth.name') }}</label>
+                <input
+                    name="email"
+                    v-model="userForm.name"
+                    :placeholder="$t('auth.emailPlaceholder')"
+                    class="w-full px-6 py-3 pl-4 mt-1 text-sm transition border-red-100 shadow-sm outline-none dark:shadow-inner dark:placeholder-opacity-40 placeholder-opacity-60 dark:placeholder-light placeholder-dark-300 shadow-dark-100 rounded-xl bg-light dark:bg-dark-50 dark:text-light text-dark-300 hover:scale-105"
+                    :class="{ 'dark:shadow-red-400 shadow-red-500 shadow-md dark:shadow-md ': v$.name.$error }"
+                />
+                <div
+                    class="pt-2 pl-2 text-sm text-red-500 dark:text-red-400 dark:opacity-70 opacity-80"
+                    v-if="v$.name.$error"
+                >{{ v$.name.$errors[0].$message }}</div>
+            </div>
             <div>
                 <label
                     class="pl-2 text-sm font-semibold dark:text-light text-dark-300"
@@ -80,12 +96,12 @@
             </div>
             <div class="text-sm text-center dark:text-light text-dark-300 dark:text-opacity-40">
                 <p>
-                    {{ $t('auth.noAccount') }}
+                    {{ $t('auth.alreadyAccount') }}
                     <a
-                        @click.prevent="router.push({ name: 'register' })"
+                        @click.prevent="router.push({ name: 'login' })"
                         href
                         class="font-bold cursor-pointer dark:text-light dark:text-opacity-100"
-                    >{{ $t('auth.signUp') }}</a>
+                    >{{ $t('auth.logIn') }}</a>
                 </p>
             </div>
         </form>
@@ -109,7 +125,7 @@ const router = useRouter();
 
 const { signInUser } = useAuth();
 
-const userForm = reactive({ email: "", password: "" });
+const userForm = reactive({ name: "", email: "", password: "" });
 
 const errorMessage = reactive({
     code: '',
@@ -117,6 +133,10 @@ const errorMessage = reactive({
 });
 
 const rules = reactive({
+    name: {
+        required: helpers.withMessage(() => `${t('validations.required')}`, required),
+        email: helpers.withMessage(() => `${t('validations.email')} `, email)
+    },
     email: {
         required: helpers.withMessage(() => `${t('validations.required')}`, required),
         email: helpers.withMessage(() => `${t('validations.email')} `, email)

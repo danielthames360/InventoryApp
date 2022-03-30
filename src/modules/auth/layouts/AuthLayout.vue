@@ -18,10 +18,10 @@
                         @click="toggleLanguage"
                         class="relative flex items-center p-2 space-x-2 transition-colors duration-300 rounded-md cursor-pointer dark:hover:text-golden text-dark-300 dark:text-light"
                     >
-                        <SpainFlagIcon class="w-6 h-6" v-if="(language != 'es')" />
+                        <SpainFlagIcon class="w-6 h-6" v-if="(locale != 'es')" />
                         <EnglishFlagIcon class="w-6 h-6" v-else />
 
-                        <h1>{{ (language != 'es') ? $t('dashboard.nav.spanish') : $t('dashboard.nav.english') }}</h1>
+                        <h1>{{ (locale != 'es') ? $t('dashboard.nav.spanish') : $t('dashboard.nav.english') }}</h1>
                     </div>
                     <div
                         @click="toggleDarkMode"

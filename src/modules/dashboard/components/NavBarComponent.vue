@@ -1,5 +1,6 @@
 <template>
     <!-- Mobile Menu toggle -->
+
     <button
         @click="sidebar.navOpen = !sidebar.navOpen"
         class="absolute sm:hidden top-5 right-5 focus:outline-none"
@@ -30,10 +31,10 @@
         </button>
         <h1
             @click="navigateTo('reports')"
-            class="pt-5 pb-10 font-black transition-all duration-300 ease hover:text-golden"
+            class="pt-5 font-black transition-all duration-300 cursor-pointer pb-14 ease text-light hover:text-golden"
             :class="sidebar.full ? 'text-2xl px-4' : 'text-xl px-4 xm:px-2'"
         >{{ sidebar.full || sidebar.navOpen ? $t("dashboard.title") : $t('dashboard.title').substring(0, 4) }}</h1>
-        <div class="px-4 space-y-2">
+        <div class="px-4 space-y-4">
             <!-- Nav Items -->
             <div
                 v-for="navigation in navigationList"
@@ -60,32 +61,30 @@
                         :is="getIcon(navigation.icon)"
                     ></component>
                     <h1
-                        :class="(!sidebar.full && navigation.showTooltip) ? tooltipClass : '' || (!sidebar.full && !navigation.showTooltip) ? 'sm:hidden' : ''"
+                        :class="(!sidebar.full && navigation.showTooltip) ? tooltips.class : '' || (!sidebar.full && !navigation.showTooltip) ? 'sm:hidden' : ''"
                     >{{ $t(navigation.name) }}</h1>
                 </div>
             </div>
         </div>
-        <div class="absolute px-4 bottom-6">
+
+        <div class="absolute flex flex-col px-4 space-y-4 bottom-10">
             <div
-                @mouseover="showDarkModeTooltip = true"
-                @mouseleave="showDarkModeTooltip = false"
-                @click="toggleDarkMode"
-                class="relative flex items-center p-2 space-x-2 transition-colors duration-300 rounded-md cursor-pointer hover:text-golden animate-pulse"
+                @mouseenter="tooltips.userTooltip = true"
+                @mouseleave="tooltips.userTooltip = false"
+                @click="modal = true"
+                class="relative flex items-center p-2 space-x-2 transition-colors duration-300 rounded-md cursor-pointer hover:text-golden"
                 :class="{ 'justify-start': sidebar.full, 'sm:justify-center': !sidebar.full }"
             >
-                <NightIcon class="w-6 h-6 fill-light" v-if="!getDarkModeStatus" />
-                <LightIcon class="w-6 h-6 fill-light" v-else />
+                <UserIcon class="w-6 h-6 fill-light" />
 
                 <h1
-                    :class="(!sidebar.full && showDarkModeTooltip) ? tooltipClass : '' || (!sidebar.full && !showDarkModeTooltip) ? 'sm:hidden' : ''"
-                >{{ !getDarkModeStatus ? $t('dashboard.nav.darkMode') : $t('dashboard.nav.lightMode') }}</h1>
+                    :class="(!sidebar.full && tooltips.userTooltip) ? tooltips.class : '' || (!sidebar.full && !tooltips.userTooltip) ? 'sm:hidden' : ''"
+                >{{ $t('dashboard.nav.logout') }}</h1>
             </div>
-        </div>
 
-        <div class="absolute px-4 bottom-20">
             <div
-                @mouseover="showLanguageTooltip = true"
-                @mouseleave="showLanguageTooltip = false"
+                @mouseenter="tooltips.languageTooltip = true"
+                @mouseleave="tooltips.languageTooltip = false"
                 @click="toggleLanguage"
                 class="relative flex items-center p-2 space-x-2 transition-colors duration-300 rounded-md cursor-pointer hover:text-golden"
                 :class="{ 'justify-start': sidebar.full, 'sm:justify-center': !sidebar.full }"
@@ -94,15 +93,38 @@
                 <EnglishFlagIcon class="w-6 h-6 fill-light" v-else />
 
                 <h1
-                    :class="(!sidebar.full && showLanguageTooltip) ? tooltipClass : '' || (!sidebar.full && !showLanguageTooltip) ? 'sm:hidden' : ''"
+                    :class="(!sidebar.full && tooltips.languageTooltip) ? tooltips.class : '' || (!sidebar.full && !tooltips.languageTooltip) ? 'sm:hidden' : ''"
                 >{{ (language != 'es') ? $t('dashboard.nav.spanish') : $t('dashboard.nav.english') }}</h1>
+            </div>
+
+            <div
+                @mouseenter="tooltips.darkModeTooltip = true"
+                @mouseleave="tooltips.darkModeTooltip = false"
+                @click="toggleDarkMode"
+                class="relative flex items-center p-2 space-x-2 transition-colors duration-300 rounded-md cursor-pointer hover:text-golden animate-pulse"
+                :class="{ 'justify-start': sidebar.full, 'sm:justify-center': !sidebar.full }"
+            >
+                <NightIcon class="w-6 h-6 fill-light" v-if="!getDarkModeStatus" />
+                <LightIcon class="w-6 h-6 fill-light" v-else />
+
+                <h1
+                    :class="(!sidebar.full && tooltips.darkModeTooltip) ? tooltips.class : '' || (!sidebar.full && !tooltips.darkModeTooltip) ? 'sm:hidden' : ''"
+                >{{ !getDarkModeStatus ? $t('dashboard.nav.darkMode') : $t('dashboard.nav.lightMode') }}</h1>
             </div>
         </div>
     </div>
+    <ModalComponent
+        :modal="modal"
+        :title="$t('modal.logout')"
+        :message="$t('modal.unconfirmedChanges')"
+        @closeModal="modal = false"
+        @confirmModal="logout"
+    />
 </template>
 
 <script setup>
 
+import UserIcon from '@/assets/icons/UserIcon';
 import HomeIcon from '@/assets/icons/HomeIcon';
 import AngleRightIcon from '@/assets/icons/AngleRightIcon';
 import SalesIcon from '@/assets/icons/SalesIcon';
@@ -114,23 +136,27 @@ import NightIcon from '@/assets/icons/NightIcon';
 import EnglishFlagIcon from '@/assets/icons/EnglishFlagIcon';
 import SpainFlagIcon from '@/assets/icons/SpainFlagIcon';
 
-import { ref, computed, defineProps, watchEffect } from 'vue';
+import ModalComponent from '../components/ModalComponent';
+
+import { ref, reactive, computed, defineProps, watchEffect } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n/index'
 
 
+//Instances
 const { locale } = useI18n() // use as global scope
-const store = useStore()
 const router = useRouter()
+const store = useStore()
 
+//Props
 const props = defineProps(['toggleNavSide'])
 
-const sidebar = ref({
-    full: false,
-    active: router.currentRoute.value.name,
-    navOpen: false
-})
+//Objects and primitives
+const modal = ref(false)
+const icons = [
+    { name: 'HomeIcon', component: HomeIcon }, { name: 'SalesIcon', component: SalesIcon }, { name: 'PurchasesIcon', component: PurchasesIcon }
+]
 const navigationList = ref([
     {
         name: 'dashboard.nav.home',
@@ -151,39 +177,33 @@ const navigationList = ref([
         route: 'purchases'
     }
 ])
-const icons = [
-    { name: 'HomeIcon', component: HomeIcon }, { name: 'SalesIcon', component: SalesIcon }, { name: 'PurchasesIcon', component: PurchasesIcon }
-]
+const sidebar = ref({
+    full: false,
+    active: router.currentRoute.value.name,
+    navOpen: false
+})
+const tooltips = reactive({
+    darkModeTooltip: false,
+    languageTooltip: false,
+    userTooltip: false,
+    class: 'w-max block sm:absolute top-3 sm:px-2 left-10 sm:text-sm bg-dark-100 sm:rounded z-1'
+})
+
+//methods
+const getDarkModeStatus = computed(() =>
+    store.getters['global/getDarkModeStatus'])
+
+const language = computed(() =>
+    store.getters['getLanguage'])
 
 
 const closeSideBar = () => {
     sidebar.value.navOpen = false;
     sidebar.value.full = false;
 }
-
-const tooltipClass = 'block sm:absolute top-2 sm:px-2 left-10 sm:text-sm bg-dark-100 sm:px2 sm:py-1 sm:rounded z-1';
-const showDarkModeTooltip = ref(false);
-const showLanguageTooltip = ref(false);
-
 const getIcon = (name) => {
     return icons.find((el) => el.name == name).component;
 }
-const toggleDarkMode = () => {
-    store.commit('global/toggleDarkMode');
-    closeSideBar()
-}
-const getDarkModeStatus = computed(() =>
-    store.getters['global/getDarkModeStatus'])
-
-const toggleLanguage = () => {
-    store.commit('global/toggleLanguage');
-
-    locale.value = (locale.value == "es") ? "en" : "es";
-    closeSideBar()
-}
-const language = computed(() =>
-    store.getters['getLanguage'])
-
 const navigateTo = (routeName) => {
     router.push({ name: routeName });
     sidebar.value.active = routeName
@@ -193,10 +213,27 @@ const navigateTo = (routeName) => {
     }
 
 }
+const toggleDarkMode = () => {
+    store.commit('global/toggleDarkMode');
+    closeSideBar()
+}
+const toggleLanguage = () => {
+    store.commit('global/toggleLanguage');
 
+    locale.value = (locale.value == "es") ? "en" : "es";
+    closeSideBar()
+}
+const logout = async () => {
+    const { ok } = await store.dispatch('auth/logout')
+    if (ok) return console.log('error al salir');
+    router.push({ name: 'login' })
+}
+
+//Watchers
 watchEffect(() => {
     props.toggleNavSide;
     closeSideBar()
 })
+
 </script>
  

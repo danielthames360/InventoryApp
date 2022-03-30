@@ -1,17 +1,20 @@
 import { createI18n } from "vue-i18n/index";
 
 import validations from "./messages/validations";
+import modal from "./messages/modal";
 import auth from "./messages/auth";
 import dashboard from "./messages/dashboard";
 
 const messages = {
   es: {
     ...validations["es"],
+    ...modal["es"],
     ...auth["es"],
     ...dashboard["es"],
   },
   en: {
     ...validations["en"],
+    ...modal["en"],
     ...auth["en"],
     ...dashboard["en"],
   },

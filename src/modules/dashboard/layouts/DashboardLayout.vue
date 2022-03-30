@@ -29,6 +29,6 @@
 import { ref, defineAsyncComponent } from 'vue';
 
 const toggleNav = ref(false);
-const NavBar = defineAsyncComponent(() => import('../components/NavBar.vue'))
+const NavBar = defineAsyncComponent(() => import('../components/NavBarComponent.vue'))
 
 </script>

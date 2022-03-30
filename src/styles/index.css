@@ -11,3 +11,8 @@
 .fade-leave-to {
   opacity: 0;
 }
+
+.clip {
+  -webkit-clip-path: polygon(20% 0, 100% 0, 100% 100vh, 0 100%);
+  clip-path: polygon(20% 0, 100% 0, 100% 100vh, 0 100%);
+}

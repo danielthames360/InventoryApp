@@ -8,3 +8,6 @@ export const currentState = (state) => {
 export const userName = (state) => {
   return state.user?.name || "";
 };
+export const user = (state) => {
+  return state.user;
+};

@@ -82,10 +82,4 @@ const toggleLanguage = () => {
 }
 
 </script>
- 
-  <style scoped>
-.clip {
-    -webkit-clip-path: polygon(20% 0, 100% 0, 100% 100vh, 0 100%);
-    clip-path: polygon(20% 0, 100% 0, 100% 100vh, 0 100%);
-}
-</style>
+  

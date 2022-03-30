@@ -37,8 +37,9 @@
                     class="pl-2 text-sm font-semibold dark:text-light text-dark-300"
                 >{{ $t('auth.name') }}</label>
                 <input
-                    name="email"
+                    name="name"
                     v-model="userForm.name"
+                    type="text"
                     :placeholder="$t('auth.namePlaceholder')"
                     class="w-full px-6 py-3 pl-4 mt-1 text-sm transition border-red-100 shadow-sm outline-none dark:shadow-inner dark:placeholder-opacity-40 placeholder-opacity-60 dark:placeholder-light placeholder-dark-300 shadow-dark-100 rounded-xl bg-light dark:bg-dark-50 dark:text-light text-dark-300 hover:scale-105"
                     :class="{ 'dark:shadow-red-400 shadow-red-500 shadow-md dark:shadow-md ': v$.name.$error }"
@@ -54,6 +55,7 @@
                 >{{ $t('auth.email') }}</label>
                 <input
                     name="email"
+                    type="email"
                     v-model="userForm.email"
                     :placeholder="$t('auth.emailPlaceholder')"
                     class="w-full px-6 py-3 pl-4 mt-1 text-sm transition border-red-100 shadow-sm outline-none dark:shadow-inner dark:placeholder-opacity-40 placeholder-opacity-60 dark:placeholder-light placeholder-dark-300 shadow-dark-100 rounded-xl bg-light dark:bg-dark-50 dark:text-light text-dark-300 hover:scale-105"

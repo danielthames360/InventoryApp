@@ -17,7 +17,7 @@
                 v-show="props.modal"
             >
                 <div
-                    class="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0"
+                    class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0"
                 >
                     <div
                         class="fixed inset-0 transition-opacity bg-black bg-opacity-80"
@@ -88,7 +88,7 @@
                                 <button
                                     @click="$emit('confirmModal')"
                                     type="button"
-                                    class="px-4 py-2 mt-3 transition rounded-xl bg-dark-300 dark:bg-golden opacity-80 hover:scale-105 dark:focus:animate-pulse sm:ml-5 sm:w-auto hover:opacity-100"
+                                    class="px-4 py-2 mt-3 ml-3 transition rounded-xl bg-dark-300 dark:bg-golden opacity-80 hover:scale-105 dark:focus:animate-pulse sm:ml-5 sm:w-auto hover:opacity-100"
                                 >
                                     <span class="text-sm font-medium dark:text-dark-300">Continuar</span>
                                 </button>

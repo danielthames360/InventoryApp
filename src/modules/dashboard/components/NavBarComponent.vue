@@ -225,7 +225,7 @@ const toggleLanguage = () => {
 }
 const logout = async () => {
     const { ok } = await store.dispatch('auth/logout')
-    if (ok) return console.log('error al salir');
+    if (!ok) return console.log('Error trying to logout');
     router.push({ name: 'login' })
 }
 

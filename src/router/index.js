@@ -3,6 +3,11 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import auth from "@/modules/auth/router";
 import dashboard from "@/modules/dashboard/router";
 
+import {
+  isAuthenticated,
+  isAuthenticatedForLogin,
+} from "../modules/auth/router/authGuard";
+
 const routes = [
   {
     path: "/",
@@ -10,10 +15,12 @@ const routes = [
   },
   {
     path: "/auth",
+    beforeEnter: [isAuthenticatedForLogin],
     ...auth,
   },
   {
     path: "/dashboard",
+    beforeEnter: [isAuthenticated],
     ...dashboard,
   },
   {

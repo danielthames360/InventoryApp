@@ -9,6 +9,7 @@
 
         <div class="grid grid-cols-2 gap-6 mt-5">
             <button
+                @click.prevent="authWithGoogle"
                 class="px-6 py-3 transition ease-in shadow-inner hover:scale-105 shadow-dark-100 rounded-xl dark:bg-dark-50 bg-dark-300 text-light focus:animate-bounce"
             >
                 <div class="flex items-center justify-center gap-4">
@@ -19,6 +20,7 @@
                 </div>
             </button>
             <button
+                @click.prevent="authWithFacebook"
                 class="px-6 py-3 transition ease-in shadow-inner hover:scale-105 shadow-dark-100 rounded-xl dark:bg-dark-50 bg-dark-300 text-light focus:animate-bounce"
             >
                 <div class="flex items-center justify-center gap-4">
@@ -108,7 +110,7 @@ const { t } = useI18n()
 
 const router = useRouter();
 
-const { signInUser } = useAuth();
+const { signInUser, signInWithGoogle, signInWithFacebook } = useAuth();
 
 const userForm = reactive({ email: "", password: "" });
 
@@ -129,6 +131,25 @@ const rules = reactive({
 
 const v$ = useVuelidate(rules, userForm)
 
+const authWithGoogle = async () => {
+    const { ok, code } = await signInWithGoogle();
+
+    if (!ok) {
+        errorMessage.message = t(`auth.errorMessages.${code}`)
+        errorMessage.code = code
+    }
+    else router.push({ name: "reports" });
+};
+
+const authWithFacebook = async () => {
+    const { ok, code } = await signInWithFacebook();
+
+    if (!ok) {
+        errorMessage.message = t(`auth.errorMessages.${code}`)
+        errorMessage.code = code
+    }
+    else router.push({ name: "reports" });
+};
 
 const onSubmit = async () => {
     const isFormCorrect = await v$.value.$validate()

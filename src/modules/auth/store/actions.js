@@ -4,39 +4,13 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   browserLocalPersistence,
+  onAuthStateChanged,
+  updateProfile,
   signOut,
+  GoogleAuthProvider,
+  signInWithPopup,
+  FacebookAuthProvider,
 } from "firebase/auth";
-
-export const createUser = async ({ commit }, user) => {
-  const { email, password } = user;
-  try {
-    const auth = getAuth();
-
-    createUserWithEmailAndPassword(auth, email, password).then(
-      (userCredential) => {
-        // Signed in
-        console.log(userCredential);
-        console.log(userCredential.user);
-
-        commit("signInUser", {
-          user,
-        });
-        // updateProfile(auth.currentUser, {
-        //   displayName: "Jane Q. User",
-        //   photoURL: "https://example.com/jane-q-user/profile.jpg",
-        // })
-        //   .then(() => {
-        //     // Profile updated!
-        //     // ...
-        //   })
-      }
-    );
-
-    return { ok: true, message: "success" };
-  } catch (error) {
-    return { ok: false, message: error.response.data.error.message };
-  }
-};
 
 export const signInUser = async ({ commit }, user) => {
   const { email, password } = user;
@@ -45,17 +19,13 @@ export const signInUser = async ({ commit }, user) => {
 
     await setPersistence(auth, browserLocalPersistence);
 
-    const userCredentials = await signInWithEmailAndPassword(
+    const { displayName, photoURL } = await signInWithEmailAndPassword(
       auth,
       email,
       password
     );
-    console.log(userCredentials);
-    console.log(userCredentials.user);
 
-    commit("signInUser", {
-      user,
-    });
+    commit("signInUser", { user: { email, displayName, photoURL } });
 
     return { ok: true, message: "success" };
   } catch ({ message, code }) {
@@ -63,34 +33,116 @@ export const signInUser = async ({ commit }, user) => {
   }
 };
 
-export const logoutUser = async ({ commit }) => {
-  const auth = getAuth();
-  signOut(auth)
-    .then(() => {
-      commit("auth/logout");
-    })
-    .catch((error) => {
-      console.log(error);
+export const createUser = async ({ commit }, user) => {
+  const { email, name, password } = user;
+  try {
+    const auth = getAuth();
+    await setPersistence(auth, browserLocalPersistence);
+
+    await createUserWithEmailAndPassword(auth, email, password);
+
+    await updateProfile(auth.currentUser, {
+      displayName: name,
+      // photoURL: "https://example.com/jane-q-user/profile.jpg",
     });
+
+    commit("signInUser", { user: { email, displayName: name } });
+
+    return { ok: true, message: "success" };
+  } catch (error) {
+    return { ok: false, message: error.response.data.error.message };
+  }
 };
 
-// export const checkAuthentication = async ({ commit }) => {
-//   const idToken = localStorage.getItem("idToken");
-//   const refreshToken = localStorage.getItem("refreshToken");
+export const signInWithGoogle = async ({ commit }) => {
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider();
+  await setPersistence(auth, browserLocalPersistence);
 
-//   if (!idToken) {
-//     commit("logout");
-//     return { ok: false, message: "There's not token" };
-//   }
+  try {
+    const response = await signInWithPopup(auth, provider);
+    if (response.user) {
+      commit("signInUser", {
+        user: {
+          email: response.user.email,
+          displayName: response.user.displayName,
+          photoURL: response.user.photoURL,
+        },
+      });
+      return { ok: true, message: "success" };
+    } else {
+      return { ok: true, message: "error" };
+    }
+  } catch (error) {
+    return { ok: false, message: error.response.data.error.message };
+  }
+};
 
-//   try {
-//     const { data } = await authApi.post(":lookup", { idToken });
-//     const { displayName, email } = data.users[0];
-//     const user = { name: displayName, email };
-//     commit("signInUser", { user, idToken, refreshToken });
-//     return { ok: true };
-//   } catch (error) {
-//     commit("logout");
-//     return { ok: false, message: error.response.data.error.message };
-//   }
-// };
+export const signInWithFacebook = async ({ commit }) => {
+  const auth = getAuth();
+  const provider = new FacebookAuthProvider();
+  await setPersistence(auth, browserLocalPersistence);
+
+  try {
+    const response = await signInWithPopup(auth, provider);
+    if (response.user) {
+      commit("signInUser", {
+        user: {
+          email: response.user.email,
+          displayName: response.user.displayName,
+          photoURL: response.user.photoURL,
+        },
+      });
+      return { ok: true, message: "success" };
+    } else {
+      return { ok: true, message: "error" };
+    }
+  } catch (error) {
+    return { ok: false, message: error.response.data.error.message };
+  }
+};
+
+export const logout = async ({ commit }) => {
+  const auth = getAuth();
+  const resp = await new Promise((resolve) => {
+    signOut(auth)
+      .then(() => {
+        resolve(true);
+      })
+      .catch(() => {
+        resolve(false);
+      });
+  });
+  if (resp) {
+    commit("logout");
+    return { ok: true };
+  } else {
+    return { ok: false };
+  }
+};
+
+export const checkAuthentication = async ({ commit }) => {
+  const auth = getAuth();
+  let localUser = null;
+  const resp = await new Promise((resolve) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const { displayName, email, photoURL } = user;
+        localUser = { displayName, email, photoURL };
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+      unsubscribe();
+    });
+  });
+
+  if (resp) {
+    commit("signInUser", {
+      user: localUser,
+    });
+    return { ok: true };
+  } else {
+    return { ok: false };
+  }
+};

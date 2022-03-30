@@ -6,4 +6,10 @@ const isAuthenticated = async (to, from, next) => {
   else next({ name: "login" });
 };
 
-export default isAuthenticated;
+const isAuthenticatedForLogin = async (to, from, next) => {
+  const { ok } = await store.dispatch("auth/checkAuthentication");
+  if (ok) next({ name: "reports" });
+  else next();
+};
+
+export { isAuthenticated, isAuthenticatedForLogin };

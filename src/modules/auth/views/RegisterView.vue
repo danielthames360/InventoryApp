@@ -9,6 +9,7 @@
 
         <div class="grid grid-cols-2 gap-6 mt-5">
             <button
+                @click.prevent="authWithGoogle"
                 class="px-6 py-3 transition ease-in shadow-inner hover:scale-105 shadow-dark-100 rounded-xl dark:bg-dark-50 bg-dark-300 text-light focus:animate-bounce"
             >
                 <div class="flex items-center justify-center gap-4">
@@ -19,6 +20,7 @@
                 </div>
             </button>
             <button
+                @click.prevent="authWithFacebook"
                 class="px-6 py-3 transition ease-in shadow-inner hover:scale-105 shadow-dark-100 rounded-xl dark:bg-dark-50 bg-dark-300 text-light focus:animate-bounce"
             >
                 <div class="flex items-center justify-center gap-4">
@@ -37,7 +39,7 @@
                 <input
                     name="email"
                     v-model="userForm.name"
-                    :placeholder="$t('auth.emailPlaceholder')"
+                    :placeholder="$t('auth.namePlaceholder')"
                     class="w-full px-6 py-3 pl-4 mt-1 text-sm transition border-red-100 shadow-sm outline-none dark:shadow-inner dark:placeholder-opacity-40 placeholder-opacity-60 dark:placeholder-light placeholder-dark-300 shadow-dark-100 rounded-xl bg-light dark:bg-dark-50 dark:text-light text-dark-300 hover:scale-105"
                     :class="{ 'dark:shadow-red-400 shadow-red-500 shadow-md dark:shadow-md ': v$.name.$error }"
                 />
@@ -70,7 +72,7 @@
                     name="password"
                     type="password"
                     v-model="userForm.password"
-                    :placeholder="$t('auth.passwordPlaceholderLogin')"
+                    :placeholder="$t('auth.passwordPlaceholder')"
                     class="w-full px-6 py-3 pl-4 mt-1 text-sm transition border-red-100 shadow-sm outline-none dark:shadow-inner placeholder-opacity-60 dark:placeholder-opacity-40 dark:placeholder-light placeholder-dark-300 shadow-dark-100 rounded-xl bg-light dark:bg-dark-50 dark:text-light text-dark-300 hover:scale-105"
                     :class="{ 'dark:shadow-red-400 shadow-red-500 shadow-md dark:shadow-md': v$.password.$error }"
                 />
@@ -91,7 +93,7 @@
                 >
                     <span
                         class="font-semibold text-md dark:text-dark-300"
-                    >{{ $t('auth.logInButton') }}</span>
+                    >{{ $t('auth.signInButton') }}</span>
                 </button>
             </div>
             <div class="text-sm text-center dark:text-light text-dark-300 dark:text-opacity-40">
@@ -113,7 +115,7 @@ import { useRouter } from "vue-router";
 import { reactive, defineProps, watch } from "vue";
 import useAuth from "../composables/useAuth";
 import useVuelidate from '@vuelidate/core'
-import { required, email, helpers } from '@vuelidate/validators'
+import { required, email, minLength, helpers } from '@vuelidate/validators'
 import { useI18n } from 'vue-i18n/index'
 
 
@@ -123,7 +125,7 @@ const { t } = useI18n()
 
 const router = useRouter();
 
-const { signInUser } = useAuth();
+const { createUser, signInWithGoogle, signInWithFacebook } = useAuth();
 
 const userForm = reactive({ name: "", email: "", password: "" });
 
@@ -135,7 +137,7 @@ const errorMessage = reactive({
 const rules = reactive({
     name: {
         required: helpers.withMessage(() => `${t('validations.required')}`, required),
-        email: helpers.withMessage(() => `${t('validations.email')} `, email)
+        minLength: helpers.withMessage(({ $params }) => `${t('validations.minLength')} ${$params.min} ${t('validations.characters')}`, minLength(8))
     },
     email: {
         required: helpers.withMessage(() => `${t('validations.required')}`, required),
@@ -143,6 +145,7 @@ const rules = reactive({
     },
     password: {
         required: helpers.withMessage(() => `${t('validations.required')}`, required),
+        minLength: helpers.withMessage(({ $params }) => `${t('validations.minLength')} ${$params.min} ${t('validations.characters')}`, minLength(8))
     },
 })
 
@@ -154,7 +157,27 @@ const onSubmit = async () => {
 
     if (!isFormCorrect) return
 
-    const { ok, code } = await signInUser(userForm);
+    const { ok, code } = await createUser(userForm);
+
+    if (!ok) {
+        errorMessage.message = t(`auth.errorMessages.${code}`)
+        errorMessage.code = code
+    }
+    else router.push({ name: "reports" });
+};
+
+const authWithGoogle = async () => {
+    const { ok, code } = await signInWithGoogle();
+
+    if (!ok) {
+        errorMessage.message = t(`auth.errorMessages.${code}`)
+        errorMessage.code = code
+    }
+    else router.push({ name: "reports" });
+};
+
+const authWithFacebook = async () => {
+    const { ok, code } = await signInWithFacebook();
 
     if (!ok) {
         errorMessage.message = t(`auth.errorMessages.${code}`)

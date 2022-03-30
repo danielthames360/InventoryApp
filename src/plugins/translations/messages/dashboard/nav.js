@@ -8,6 +8,7 @@ const translation = {
       lightMode: "Modo claro",
       spanish: "Español",
       english: "Inglés",
+      logout: "Cerrar sesión",
     },
   },
   en: {
@@ -19,6 +20,7 @@ const translation = {
       lightMode: "Light mode",
       spanish: "Spanish",
       english: "English",
+      logout: "Logout",
     },
   },
 };

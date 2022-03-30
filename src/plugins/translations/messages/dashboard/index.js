@@ -16,5 +16,4 @@ const translation = {
     },
   },
 };
-console.log(translation);
 export default translation;

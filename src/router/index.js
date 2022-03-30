@@ -1,25 +1,27 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
-import reports from "@/modules/reports/router";
-import sales from "@/modules/sales/router";
-import purchases from "@/modules/purchases/router";
+import auth from "@/modules/auth/router";
+import dashboard from "@/modules/dashboard/router";
+
+import {
+  isAuthenticated,
+  isAuthenticatedForLogin,
+} from "../modules/auth/router/authGuard";
 
 const routes = [
   {
     path: "/",
-    redirect: "/dashboard",
+    redirect: "/auth",
+  },
+  {
+    path: "/auth",
+    beforeEnter: [isAuthenticatedForLogin],
+    ...auth,
   },
   {
     path: "/dashboard",
-    ...reports,
-  },
-  {
-    path: "/sales",
-    ...sales,
-  },
-  {
-    path: "/purchases",
-    ...purchases,
+    beforeEnter: [isAuthenticated],
+    ...dashboard,
   },
   {
     path: "/:pathMatch(.*)*",

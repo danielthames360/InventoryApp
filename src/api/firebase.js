@@ -6,13 +6,7 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBsEFnS-7J_SRRnY8nt5ACtsNnJrWQM9aY",
-  authDomain: "vue-demos-b40cd.firebaseapp.com",
-  databaseURL: "https://vue-demos-b40cd-default-rtdb.firebaseio.com",
-  projectId: "vue-demos-b40cd",
-  storageBucket: "vue-demos-b40cd.appspot.com",
-  messagingSenderId: "510867177337",
-  appId: "1:510867177337:web:374cc155f93b03f2ceb9a8",
+  //Your firebase config
 };
 
 // Initialize Firebase

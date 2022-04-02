@@ -39,7 +39,7 @@
             <div
                 v-for="navigation in navigationList"
                 :key="navigation.name"
-                v-memo="[navigation.showTooltip, sidebar.active, sidebar.full, language]"
+                v-memo="[navigation.showTooltip, sidebar.active, sidebar.full, locale]"
             >
                 <div
                     @click="navigateTo(navigation.route)"
@@ -89,12 +89,12 @@
                 class="relative flex items-center p-2 space-x-2 transition-colors duration-300 rounded-md cursor-pointer hover:text-golden"
                 :class="{ 'justify-start': sidebar.full, 'sm:justify-center': !sidebar.full }"
             >
-                <SpainFlagIcon class="w-6 h-6 fill-light" v-if="(language != 'es')" />
+                <SpainFlagIcon class="w-6 h-6 fill-light" v-if="(locale != 'es')" />
                 <EnglishFlagIcon class="w-6 h-6 fill-light" v-else />
 
                 <h1
                     :class="(!sidebar.full && tooltips.languageTooltip) ? tooltips.class : '' || (!sidebar.full && !tooltips.languageTooltip) ? 'sm:hidden' : ''"
-                >{{ (language != 'es') ? $t('dashboard.nav.spanish') : $t('dashboard.nav.english') }}</h1>
+                >{{ (locale != 'es') ? $t('dashboard.nav.spanish') : $t('dashboard.nav.english') }}</h1>
             </div>
 
             <div
@@ -186,16 +186,12 @@ const tooltips = reactive({
     darkModeTooltip: false,
     languageTooltip: false,
     userTooltip: false,
-    class: 'w-max block sm:absolute top-3 sm:px-2 left-10 sm:text-sm bg-dark-100 sm:rounded z-1'
+    class: 'w-max block sm:absolute  p-2 left-10 sm:text-sm bg-dark-100 sm:rounded z-1'
 })
 
 //methods
 const getDarkModeStatus = computed(() =>
     store.getters['global/getDarkModeStatus'])
-
-const language = computed(() =>
-    store.getters['getLanguage'])
-
 
 const closeSideBar = () => {
     sidebar.value.navOpen = false;

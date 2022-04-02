@@ -41,7 +41,7 @@
                     v-model="userForm.name"
                     type="text"
                     :placeholder="$t('auth.namePlaceholder')"
-                    class="w-full px-6 py-3 pl-4 mt-1 text-sm transition border-red-100 shadow-sm outline-none dark:shadow-inner dark:placeholder-opacity-40 placeholder-opacity-60 dark:placeholder-light placeholder-dark-300 shadow-dark-100 rounded-xl bg-light dark:bg-dark-50 dark:text-light text-dark-300 hover:scale-105"
+                    class="w-full px-6 py-3 pl-4 mt-1 text-sm transition border-red-100 shadow-sm outline-none appearance-none dark:shadow-inner dark:placeholder-opacity-40 placeholder-opacity-60 dark:placeholder-light placeholder-dark-300 shadow-dark-100 rounded-xl bg-light dark:bg-dark-50 dark:text-light text-dark-300 hover:scale-105"
                     :class="{ 'dark:shadow-red-400 shadow-red-500 shadow-md dark:shadow-md ': v$.name.$error }"
                 />
                 <div
@@ -58,7 +58,7 @@
                     type="email"
                     v-model="userForm.email"
                     :placeholder="$t('auth.emailPlaceholder')"
-                    class="w-full px-6 py-3 pl-4 mt-1 text-sm transition border-red-100 shadow-sm outline-none dark:shadow-inner dark:placeholder-opacity-40 placeholder-opacity-60 dark:placeholder-light placeholder-dark-300 shadow-dark-100 rounded-xl bg-light dark:bg-dark-50 dark:text-light text-dark-300 hover:scale-105"
+                    class="w-full px-6 py-3 pl-4 mt-1 text-sm transition border-red-100 shadow-sm outline-none appearance-none dark:shadow-inner dark:placeholder-opacity-40 placeholder-opacity-60 dark:placeholder-light placeholder-dark-300 shadow-dark-100 rounded-xl bg-light dark:bg-dark-50 dark:text-light text-dark-300 hover:scale-105"
                     :class="{ 'dark:shadow-red-400 shadow-red-500 shadow-md dark:shadow-md ': v$.email.$error }"
                 />
                 <div
@@ -75,7 +75,7 @@
                     type="password"
                     v-model="userForm.password"
                     :placeholder="$t('auth.passwordPlaceholder')"
-                    class="w-full px-6 py-3 pl-4 mt-1 text-sm transition border-red-100 shadow-sm outline-none dark:shadow-inner placeholder-opacity-60 dark:placeholder-opacity-40 dark:placeholder-light placeholder-dark-300 shadow-dark-100 rounded-xl bg-light dark:bg-dark-50 dark:text-light text-dark-300 hover:scale-105"
+                    class="w-full px-6 py-3 pl-4 mt-1 text-sm transition border-red-100 shadow-sm outline-none appearance-none dark:shadow-inner placeholder-opacity-60 dark:placeholder-opacity-40 dark:placeholder-light placeholder-dark-300 shadow-dark-100 rounded-xl bg-light dark:bg-dark-50 dark:text-light text-dark-300 hover:scale-105"
                     :class="{ 'dark:shadow-red-400 shadow-red-500 shadow-md dark:shadow-md': v$.password.$error }"
                 />
                 <div

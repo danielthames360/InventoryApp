@@ -12,6 +12,21 @@ import { useStore } from "vuex";
 
 const store = useStore();
 
+
+const currentDarkMode = localStorage.getItem("darkMode");
+if (currentDarkMode === null) {
+  if (
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+  ) {
+    store.commit('global/setInitialDarkMode', true)
+  } else {
+    store.commit('global/setInitialDarkMode', false)
+  }
+} else {
+  store.commit('global/setInitialDarkMode', JSON.parse(currentDarkMode))
+}
+
 const getDarkMode = computed(() => store.getters['global/getDarkModeStatus'])
 
 </script>

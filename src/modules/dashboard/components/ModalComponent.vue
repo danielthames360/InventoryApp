@@ -10,7 +10,7 @@
         >
             <!-- This example requires Tailwind CSS v2.0+ -->
             <div
-                class="fixed inset-0 z-10 overflow-y-auto"
+                class="fixed inset-0 z-10 overflow-y-auto appearance-none"
                 aria-labelledby="modal-title"
                 role="dialog"
                 aria-modal="true"
@@ -83,14 +83,18 @@
                                     type="button"
                                     class="px-4 py-2 mt-3 transition rounded-xl bg-dark-300 dark:bg-red-500 opacity-80 hover:scale-105 dark:focus:animate-pulse sm:ml-3 sm:w-auto hover:opacity-100"
                                 >
-                                    <span class="text-sm font-medium dark:text-light">Cancel</span>
+                                    <span
+                                        class="text-sm font-medium dark:text-light"
+                                    >{{ $t('modal.cancel') }}</span>
                                 </button>
                                 <button
                                     @click="$emit('confirmModal')"
                                     type="button"
                                     class="px-4 py-2 mt-3 ml-3 transition rounded-xl bg-dark-300 dark:bg-golden opacity-80 hover:scale-105 dark:focus:animate-pulse sm:ml-5 sm:w-auto hover:opacity-100"
                                 >
-                                    <span class="text-sm font-medium dark:text-dark-300">Continuar</span>
+                                    <span
+                                        class="text-sm font-medium dark:text-dark-300"
+                                    >{{ $t('modal.confirm') }}</span>
                                 </button>
                             </div>
                         </div>

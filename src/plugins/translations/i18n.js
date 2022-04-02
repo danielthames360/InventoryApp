@@ -1,4 +1,5 @@
 import { createI18n } from "vue-i18n/index";
+import language from "./getLanguage";
 
 import validations from "./messages/validations";
 import modal from "./messages/modal";
@@ -23,7 +24,7 @@ console.log(messages);
 
 export default createI18n({
   //window.navigator.language.split('-')[0] it uses the default browser language
-  locale: window.navigator.language.split("-")[0],
+  locale: language,
   fallbackLocale: "en",
   messages,
   allowComposition: true, // you need to specify that!

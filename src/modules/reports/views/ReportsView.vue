@@ -1,16 +1,6 @@
 <template>
     <div>
         <h1 class="mb-10 text-2xl font-bold">Graphics will be here</h1>
-        <br />
-        <h1 class="mb-3 text-2xl font-bold">Welcome {{ user.displayName }}</h1>
-        <img
-            class="mx-auto"
-            v-if="user.photoURL"
-            :src="user.photoURL"
-            alt
-        />
-        <br />
-
         <video
             playsinline
             class="shadow-lg aspect-video dark:shadow-golden shadow-dark-300"
@@ -33,13 +23,5 @@
 
  <script setup>
 
-import { computed } from 'vue';
-import { useStore } from 'vuex';
-
-const store = useStore();
-
-const user = computed(() => {
-    return store.getters['auth/user']
-})
 
 </script>

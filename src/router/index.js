@@ -1,11 +1,13 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
 import auth from "@/modules/auth/router";
+import user from "@/modules/user/router";
 import dashboard from "@/modules/dashboard/router";
 
 import {
   isAuthenticated,
   isAuthenticatedForLogin,
+  isAuthenticatedAndConfirmed
 } from "../modules/auth/router/authGuard";
 
 const routes = [
@@ -19,8 +21,13 @@ const routes = [
     ...auth,
   },
   {
-    path: "/dashboard",
+    path: "/user",
     beforeEnter: [isAuthenticated],
+    ...user,
+  },
+  {
+    path: "/dashboard",
+    beforeEnter: [isAuthenticatedAndConfirmed],
     ...dashboard,
   },
   {

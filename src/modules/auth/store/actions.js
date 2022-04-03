@@ -12,6 +12,8 @@ import {
   FacebookAuthProvider,
 } from "firebase/auth";
 
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+
 export const signInUser = async ({ commit }, user) => {
   const { email, password } = user;
   try {
@@ -48,6 +50,8 @@ export const createUser = async ({ commit }, user) => {
 
     commit("signInUser", { user: { email, displayName: name } });
 
+    setInternalUser({ id: auth.currentUser.uid, email: email });
+
     return { ok: true, message: "success" };
   } catch (error) {
     return { ok: false, message: error.response.data.error.message };
@@ -69,6 +73,9 @@ export const signInWithGoogle = async ({ commit }) => {
           photoURL: response.user.photoURL,
         },
       });
+
+      setInternalUser({ id: response.user.uid, email: response.user.email });
+
       return { ok: true, message: "success" };
     } else {
       return { ok: true, message: "error" };
@@ -93,6 +100,9 @@ export const signInWithFacebook = async ({ commit }) => {
           photoURL: response.user.photoURL,
         },
       });
+
+      setInternalUser({ id: response.user.uid, email: response.user.email });
+
       return { ok: true, message: "success" };
     } else {
       return { ok: true, message: "error" };
@@ -144,5 +154,32 @@ export const checkAuthentication = async ({ commit }) => {
     return { ok: true };
   } else {
     return { ok: false };
+  }
+};
+
+export const checkConfirmation = async () => {
+  const auth = getAuth();
+  const db = getFirestore();
+  const docRef = doc(db, "users", auth.currentUser.uid);
+  const docSnap = await getDoc(docRef);
+
+  if (!docSnap.exists()) return false;
+
+  const { isConfirmed } = docSnap.data();
+  return isConfirmed;
+};
+
+const setInternalUser = async (user) => {
+  const db = getFirestore();
+
+  const docRef = doc(db, "users", user.id);
+  const docSnap = await getDoc(docRef);
+
+  if (!docSnap.exists()) {
+    // Add a new document in collection "cities"
+    await setDoc(doc(db, "users", user.id), {
+      isConfirmed: false,
+      email: user.email,
+    });
   }
 };

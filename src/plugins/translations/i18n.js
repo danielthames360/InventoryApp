@@ -1,4 +1,4 @@
-import { createI18n } from "vue-i18n/index";
+import { createI18n } from "vue-i18n/index.mjs";
 import language from "./getLanguage";
 
 import confirmation from "./messages/confirmation";

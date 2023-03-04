@@ -118,7 +118,7 @@ import { reactive, defineProps, watch } from "vue";
 import useAuth from "../composables/useAuth";
 import useVuelidate from '@vuelidate/core'
 import { required, email, minLength, helpers } from '@vuelidate/validators'
-import { useI18n } from 'vue-i18n/index'
+import { useI18n } from 'vue-i18n/index.mjs'
 
 
 const props = defineProps(['language'])
